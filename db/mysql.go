@@ -16,7 +16,7 @@ func init() {
 }
 
 func conn() {
-	d, err := sql.Open("mysql", "root:5L!r00t-my5q1@tcp(www.southlocal.cn:3306)/gaopin_test")
+	d, err := sql.Open("mysql", "")
 	if err != nil {
 		fmt.Println(err)
 	}
