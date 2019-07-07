@@ -1,28 +1,39 @@
 package db
 
 import (
-	"database/sql"
-	"fmt"
-
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 var (
-	db *sql.DB
+	db *gorm.DB
 )
 
+type FrUrl struct {
+	// Id      uint   `json:"id"`
+	Key     string `json:"key"`
+	Url     string `json:"url"`
+	Expires int    `json:"expires"`
+	gorm.Model
+}
+
 func init() {
-	conn()
-}
-
-func conn() {
-	d, err := sql.Open("mysql", "")
+	//open a db connection
+	var err error
+	db, err = gorm.Open("mysql", "root:12345@/demo?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
-		fmt.Println(err)
+		panic("failed to connect database")
 	}
-	db = d
+	//Migrate the schema
+	db.AutoMigrate(&FrUrl{})
 }
 
-func getUrl(tkey string) string {
+func Save(url *FrUrl) {
+	db.Save(url)
+}
 
+func Get(key string) FrUrl {
+	var url FrUrl
+	db.First(&url, "key=?", key)
+	return url
 }

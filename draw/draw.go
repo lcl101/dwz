@@ -6,39 +6,30 @@ import (
 	"math"
 )
 
-// DrawAlpha 画透明图
-type DrawAlpha struct {
+// DrawRgb 画透明图
+type DrawRgb struct {
 	Wave
 }
 
 // NewDrawAlpha new一个实例
-func NewDrawAlpha() *DrawAlpha {
-	d := &DrawAlpha{}
-	// d = DrawAlpha{
-	// 	ImgY:      50,
-	// 	ScaleX:    5,
-	// 	ScaleY:    0.8,
-	// 	LineWidth: 2,
-	// 	Step:      5,
-	// 	MColor:    color.RGBA{0x32, 0x32, 0x32, 0xff},
-	// 	SColor:    color.RGBA{0x80, 0x80, 0x80, 0xff},
-	// }
+func NewDrawRGBA() *DrawRgb {
+	d := &DrawRgb{}
 	d.ImgY = 50
 	d.ScaleX = 5
 	d.ScaleY = 0.8
+	d.Sharpness = 1
 	d.LineWidth = 2
 	d.Step = 5
-	// d.MColor = color.RGBA{0x32, 0x32, 0x32, 0xff}
-	d.MColor = color.RGBA{0xff, 0x0, 0x0, 0xff}
-	d.SColor = color.RGBA{0x80, 0x80, 0x80, 0xff}
+	d.MColor = color.RGBA{0x66, 0x66, 0x66, 0xff}
+	d.SColor = color.RGBA{0x99, 0x99, 0x99, 0xff}
 	return d
 }
 
 // Draw 实现画图
-func (d *DrawAlpha) Draw() image.Image {
+func (d *DrawRgb) Draw() image.Image {
 	waveX := d.waveX()
 	waveY := d.ImgY
-	img := image.NewAlpha(image.Rect(0, 0, waveX, waveY))
+	img := image.NewRGBA(image.Rect(0, 0, waveX, waveY))
 	bounds := img.Bounds()
 	// Calculate halfway point of Y-axis for image
 	imgHalfY := bounds.Max.Y / 2
@@ -59,14 +50,12 @@ func (d *DrawAlpha) Draw() image.Image {
 		for y := 0; y < intBoundY; y++ {
 			// If X-axis is being scaled, draw background over several X coordinates
 			for i := 0; i < d.sxld(); i++ {
-				// img.Set(x+i, y, color.RGBA{0xfe, 0xfe, 0xfe, 255})
-				img.SetAlpha(x+i, y, color.Alpha{0})
+				img.Set(x+i, y, color.RGBA{0x0, 0x0, 0x0, 0})
 			}
 		}
 
 		for y := imgHalfY - halfScaleComputed; y < scaleComputed+(imgHalfY-halfScaleComputed); y++ {
 			for i := 0; i < d.ScaleX; i++ {
-
 				d.drawLine(x, y, i, imgHalfY, img)
 			}
 		}
@@ -74,10 +63,6 @@ func (d *DrawAlpha) Draw() image.Image {
 		x += d.sxld()
 	}
 	return img
-}
-
-type DrawRgb struct {
-	Wave
 }
 
 // Draw takes a slice of computed values and generates
@@ -149,7 +134,7 @@ func Draw(scaleX, scaleY int, step int, computed []float64) image.Image {
 		for y := 0; y < intBoundY; y++ {
 			// If X-axis is being scaled, draw background over several X coordinates
 			for i := 0; i < intScaleX; i++ {
-				img.Set(x+i, y, color.RGBA{0xfe, 0xfe, 0xfe, 0})
+				img.Set(x+i, y, color.RGBA{0x0, 0x0, 0x0, 0})
 			}
 		}
 

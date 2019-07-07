@@ -1,0 +1,20 @@
+Db
+  user: root
+  passwd: xxxx
+  host: xxx
+  port: 3306
+  database: my_test
+
+Http
+  ip: 127.0.0.1
+  port: 10000
+
+Url
+  home: http://www.southlocal.cn
+
+Gen:
+  base: http://www.southlocal.cn/t/%s
+  length: 6
+  unique: false
+  humanity: false
+  algorithm: 1 # 0 - random string; 1 - auto increment 
