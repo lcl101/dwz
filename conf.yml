@@ -1,7 +1,7 @@
 Db
   user: root
   passwd: xxxx
-  host: xxx
+  host: xxxr
   port: 3306
   database: my_test
 
