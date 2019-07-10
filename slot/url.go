@@ -108,7 +108,7 @@ func FindUrlBySlot(slot string) *Url {
 	// url.Count++
 	// url.Save()
 	var url Url
-	db.First(&url, slot)
+	db.First(&url, "slot=?", slot)
 	return &url
 }
 
@@ -161,7 +161,7 @@ func SlotExist(slot string) bool {
 	// }
 	// return false
 	url := FindUrlBySlot(slot)
-	return url == nil
+	return url != nil
 }
 
 func (u *Url) Expired() bool {

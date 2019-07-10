@@ -14,12 +14,12 @@ type DrawRgb struct {
 // NewDrawAlpha new一个实例
 func NewDrawRGBA() *DrawRgb {
 	d := &DrawRgb{}
-	d.ImgY = 50
+	d.ImgY = 100
 	d.ScaleX = 5
-	d.ScaleY = 0.8
+	d.ScaleY = 0.9
 	d.Sharpness = 1
 	d.LineWidth = 2
-	d.Step = 5
+	d.Step = 4
 	d.MColor = color.RGBA{0x66, 0x66, 0x66, 0xff}
 	d.SColor = color.RGBA{0x99, 0x99, 0x99, 0xff}
 	return d

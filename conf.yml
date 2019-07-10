@@ -1,15 +1,15 @@
-Db
+Db:
   user: root
   passwd: xxxx
   host: xxxr
   port: 3306
   database: my_test
 
-Http
+Http:
   ip: 127.0.0.1
   port: 10000
 
-Url
+Url:
   home: http://www.southlocal.cn
 
 Gen:

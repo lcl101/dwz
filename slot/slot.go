@@ -3,6 +3,8 @@ package slot
 import (
 	"math/rand"
 	"time"
+
+	"github.com/lcl101/dwz/conf"
 )
 
 const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -19,11 +21,11 @@ var SlotGenerator *Slot
 
 type GenFunc func() string
 
-func InitSlotGenerator(length, algorithm int, humanity bool) {
+func InitSlotGenerator() {
 	SlotGenerator = NewSlot()
-	SlotGenerator.Length = length
-	SlotGenerator.Algorithm = algorithm
-	SlotGenerator.Humanity = humanity
+	SlotGenerator.Length = conf.Conf.Gen.Length
+	SlotGenerator.Algorithm = conf.Conf.Gen.Algorithm
+	SlotGenerator.Humanity = conf.Conf.Gen.Humanity
 	SlotGenerator.Run()
 }
 
