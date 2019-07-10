@@ -52,9 +52,12 @@ func InitDB() {
 
 func NewUrl(origin string, unique bool) *Url {
 	//check origin exist
-	if unique && OriginExist(origin) {
+	if unique {
 		url := FindUrlByOrigin(origin)
-		return url
+		if url != nil {
+			//说明存在
+			return url
+		}
 	}
 	url := &Url{
 		Slot:         SlotGenerator.Get(),
@@ -64,13 +67,13 @@ func NewUrl(origin string, unique bool) *Url {
 		ExpiresIn:    0,
 		Count:        0,
 	}
-	for {
-		// check slot exist
-		if !SlotExist(url.Slot) {
-			break
-		}
-		url.Slot = SlotGenerator.Get()
-	}
+	// for {
+	// 	// check slot exist
+	// 	if !SlotExist(url.Slot) {
+	// 		break
+	// 	}
+	// 	url.Slot = SlotGenerator.Get()
+	// }
 	db.Save(url)
 	return url
 }
@@ -94,21 +97,18 @@ func NewUrl(origin string, unique bool) *Url {
 func FindUrlByOrigin(origin string) *Url {
 	var url Url
 	db.First(&url, "origin=?", origin)
+	if url.Slot == "" {
+		return nil
+	}
 	return &url
 }
 
 func FindUrlBySlot(slot string) *Url {
-	// session := GetMgo()
-	// defer session.Close()
-	// var url Url
-	// err := session.DB("ifth").C("url").Find(bson.M{"slot": slot}).One(&url)
-	// if err != nil {
-	// 	return nil, err
-	// }
-	// url.Count++
-	// url.Save()
 	var url Url
 	db.First(&url, "slot=?", slot)
+	if url.Slot == "" {
+		return nil
+	}
 	return &url
 }
 
@@ -146,22 +146,18 @@ func OriginExist(origin string) bool {
 	// }
 	// return false
 	url := FindUrlByOrigin(origin)
-	return url == nil
+	if url == nil {
+		return false
+	}
+	return true
 }
 
 func SlotExist(slot string) bool {
-	// session := GetMgo()
-	// defer session.Close()
-	// ct, err := session.DB("ifth").C("url").Find(bson.M{"slot": slot}).Count()
-	// if err != nil {
-	// 	return false //may cause problem?
-	// }
-	// if ct > 0 {
-	// 	return true
-	// }
-	// return false
 	url := FindUrlBySlot(slot)
-	return url != nil
+	if url == nil {
+		return false
+	}
+	return true
 }
 
 func (u *Url) Expired() bool {

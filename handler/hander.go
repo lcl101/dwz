@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"image/png"
+	"time"
 
 	"net"
 	"net/http"
@@ -12,18 +13,44 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lcl101/dwz/cache"
 	"github.com/lcl101/dwz/conf"
 	mydraw "github.com/lcl101/dwz/draw"
 	"github.com/lcl101/dwz/log"
 	"github.com/lcl101/dwz/slot"
 )
 
+const (
+	defaultExpiration time.Duration = 5 * time.Minute
+	cleanupInterval   time.Duration = 10 * time.Minute
+)
+
+var urlCache *cache.Cache
+
+// c := cache.New(5*time.Minute, 10*time.Minute)
+
+func InitCache() {
+	urlCache = cache.New(defaultExpiration, cleanupInterval)
+}
+
 // Turl 转换地址
 func Turl(c *gin.Context) {
 	path := c.Param("path")
-	url := slot.FindUrlBySlot(path)
-	log.Log.Debugf("%#v\n", url)
+	var url *slot.Url
+	o, exists := urlCache.Get(path)
+	if !exists {
+		log.Log.Debugf("path %s未命中缓存", path)
+		url = slot.FindUrlBySlot(path)
+		if url != nil {
+			urlCache.Set(path, url, defaultExpiration)
+		}
+	} else {
+		url = o.(*slot.Url)
+		log.Log.Debugf("path %s命中缓存", path)
+	}
+
 	if url == nil {
+		log.Log.Warnf("短地址:%s没有找到", path)
 		c.Redirect(http.StatusSeeOther, conf.Conf.Url.Home)
 		return
 	}

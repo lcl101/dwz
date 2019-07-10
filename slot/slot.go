@@ -72,8 +72,15 @@ func (s *Slot) run() {
 		} else {
 			result = random(s.Length)
 		}
-		s.queue <- result
-		time.Sleep(1)
+		//验证提前到这
+		if SlotExist(result) {
+			time.Sleep(1)
+			continue
+		} else {
+			s.queue <- result
+			time.Sleep(1)
+		}
+		// log.Log.Debugf("AutoIncrement=%d,Algorithm=%d, result=%s", Random, s.Algorithm, result)
 	}
 }
 
@@ -105,7 +112,6 @@ func random(length int) string {
 		film >>= 6
 		remain--
 	}
-	// log.Println("genereate：", string(result))
 	return string(result)
 }
 

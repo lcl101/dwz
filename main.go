@@ -55,6 +55,7 @@ func run() {
 	log.InitLog()
 	slot.InitDB()
 	slot.InitSlotGenerator()
+	handler.InitCache()
 	log.Log.Debug("开始运行")
 
 	// router := gin.Default()

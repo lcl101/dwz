@@ -4,10 +4,10 @@ var Conf Config
 
 type Config struct {
 	LogLevel string `yaml:"loglevel"`
-	Db       DB     `yaml:"Db"`
-	Http     HTTP   `yaml:"Http"`
-	Url      URL    `yaml:"Url"`
-	Gen      GEN    `yaml:"Gen"`
+	Db       DB     `yaml:"db"`
+	Http     HTTP   `yaml:"http"`
+	Url      URL    `yaml:"url"`
+	Gen      GEN    `yaml:"gen"`
 }
 
 type DB struct {
