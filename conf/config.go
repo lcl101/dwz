@@ -8,6 +8,7 @@ type Config struct {
 	Http     HTTP   `yaml:"http"`
 	Url      URL    `yaml:"url"`
 	Gen      GEN    `yaml:"gen"`
+	App      APP    `yaml:"app"`
 }
 
 type DB struct {
@@ -33,4 +34,9 @@ type GEN struct {
 	Unique    bool   `yaml:"unique"`
 	Humanity  bool   `yaml:"humanity"`
 	Algorithm int    `yaml:"algorithm"`
+}
+
+type APP struct {
+	AppKey    string `yaml:"appKey"`
+	AppSecret string `yaml:"appSecret"`
 }

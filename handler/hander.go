@@ -71,12 +71,18 @@ func Gen(c *gin.Context) {
 		printRtn(c, "100000", fmt.Sprintf("参数错误:%s", err.Error()), "")
 		return
 	}
+
+	if (uri.AppKey != conf.Conf.App.AppKey) || (uri.AppSecret != conf.Conf.App.AppSecret) {
+		printRtn(c, "100004", "appkey或者AppSecret", "")
+		return
+	}
+
 	url := slot.NewUrl(uri.Url, conf.Conf.Gen.Unique)
 	if url == nil {
 		printRtn(c, "100002", "创建失败", "")
 		return
 	}
-	printRtn(c, "000000", "创建成", fmt.Sprintf(conf.Conf.Gen.Base, url.Slot))
+	printRtn(c, "000000", "创建成功", fmt.Sprintf(conf.Conf.Gen.Base, url.Slot))
 }
 
 // Draw 音乐波形图
